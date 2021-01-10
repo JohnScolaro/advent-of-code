@@ -1,3 +1,7 @@
+'''
+Solutions for the Advent of Code - Day 2
+'''
+
 def n_valid_policy_1(input_file):
     """Returns the number of passwords that pass password policy 1"""
     num_good_files = 0

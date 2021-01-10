@@ -1,5 +1,5 @@
 '''
-Solution to day 4's Advent of Code challenge
+Solutions for the Advent of Code - Day 4
 '''
 
 def parse_input_to_get_passport_data(input_file: str) -> list:

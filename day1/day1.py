@@ -1,3 +1,7 @@
+'''
+Solutions for the Advent of Code - Day 1
+'''
+
 import bisect
 
 def find_numbers_that_sum_to_goal(input_file: str, n: int, goal: int):

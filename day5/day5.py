@@ -1,5 +1,5 @@
 '''
-Day 5 of the advent of code problems.
+Solutions for the Advent of Code - Day 5
 '''
 
 if __name__ == "__main__":

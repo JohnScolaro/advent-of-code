@@ -1,5 +1,5 @@
 '''
-Solve for day6's problem of the advent of code.
+Solutions for the Advent of Code - Day 6
 '''
 
 def get_inputs(input_file: str) -> list:
