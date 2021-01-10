@@ -30,6 +30,9 @@ def sum_exists_in_list(list_of_numbers, n, i):
     return True
 
 def part_b(list_of_numbers: list, goal: int) -> int:
+    """
+    Loops over all windows sizes until a successful contigous sum is found.
+    """
     i = 2
     while True:
         successful_list = contiguous_sum_of_window(list_of_numbers, i, goal)
@@ -40,6 +43,12 @@ def part_b(list_of_numbers: list, goal: int) -> int:
 
 
 def contiguous_sum_of_window(list_of_numbers: list, window_size: int, goal: int) -> list:
+    """
+    Checks to see if a contiguous window of size window_size can be summed
+    together to create the goal number.
+
+    Slides the windows across the whole list.
+    """
     sub_list = list_of_numbers[0:window_size]
     i = window_size
     while (i < len(list_of_numbers)):
@@ -55,8 +64,8 @@ if __name__ == "__main__":
     list_of_numbers = get_list_of_numbers('input.txt')
 
     # Part A
-    print(part_a(list_of_numbers, 25))
+    print("Part A: " + str(part_a(list_of_numbers, 25)))
 
     # Part B
-    print(part_b(list_of_numbers, part_a(list_of_numbers, 25)))
+    print("Part B: " + str(part_b(list_of_numbers, part_a(list_of_numbers, 25))))
     
