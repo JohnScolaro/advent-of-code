@@ -67,10 +67,5 @@ def execute_n_ticks(active_points: set, n) -> set:
 
 
 if __name__ == "__main__":
-    active_points = get_starting_active_points('input.txt', 3)
-    active_points = execute_n_ticks(active_points, 6)
-    print("Part A: " + str(len(active_points)))
-
-    active_points = get_starting_active_points('input.txt', 4)
-    active_points = execute_n_ticks(active_points, 6)
-    print("Part B: " + str(len(active_points)))
+    print("Part A: " + str(len(execute_n_ticks(get_starting_active_points('input.txt', 3), 6))))
+    print("Part B: " + str(len(execute_n_ticks(get_starting_active_points('input.txt', 4), 6))))
