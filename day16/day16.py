@@ -2,9 +2,11 @@
 Solutions for the Advent of Code - Day 16
 '''
 
-import numpy as np
-
 class Field(object):
+    """
+    An object representing a train ticket field and rules that the numbers on
+    the card must follow.
+    """
     def __init__(self, name: str, range1: str, range2: str):
         self.range1 = range1.split('-')
         self.range1 = (int(self.range1[0]), int(self.range1[1]))
@@ -12,7 +14,17 @@ class Field(object):
         self.range2 = (int(self.range2[0]), int(self.range2[1]))
         self.name = name
 
+    def in_range(self, n: int):
+        if n >= self.range1[0] and n <= self.range1[1]:
+            return True
+        if n >= self.range2[0] and n <= self.range2[1]:
+            return True
+        return False
+
 def read_input(file_name: str):
+    """
+    String parsing. Going to be fairly ugly no matter how you do it.
+    """
     l = []
     with open(file_name, 'r') as fb:
         for line in fb:
@@ -27,25 +39,23 @@ def read_input(file_name: str):
     return (fields, our_ticket, nearby_tickets)
 
 def get_valid_numbers(fields: list):
-    '''
-    Takes a list of fields of value numbers, and creates a set of numbers that
+    """
+    Takes a list of fields objects, and creates a set of numbers that
     are valid.
-    '''
+    """
     s = set()
-    for r in fields:
-        for x in range(r[0], r[1] + 1):
+    for f in fields:
+        for x in range(f.range1[0], f.range1[1] + 1):
+            s.add(x)
+        for x in range(f.range2[0], f.range2[1] + 1):
             s.add(x)
     return s
 
-def part_a(fields, nearby_tickets):
-    '''
+def part_a(fields: list, nearby_tickets: list):
+    """
     Find the sum of all values on all tickets that are not valid in any field.
-    '''
-    f = []
-    for field in fields:
-        f.append(field.range1)
-        f.append(field.range2)
-    set_of_valid_numbers = get_valid_numbers(f)
+    """
+    set_of_valid_numbers = get_valid_numbers(fields)
 
     sum_of_invalid_nums = 0
     for ticket in nearby_tickets:
@@ -61,20 +71,67 @@ def is_ticket_valid(ticket: list, valid_numbers: set):
             return False
     return True
 
-def get_ranges_of_fields(nearby_tickets: list):
-    tickets = np.array(nearby_tickets)
-    print(np.shape(tickets))
-    tickets = np.transpose(tickets)
-    print(np.shape(tickets))
-    maxs = np.max(tickets)
-    mins = np.min(tickets)
-    print(np.shape(mins))
+def all_sets_are_single_element(sets: list) -> bool:
+    for x in sets:
+        if len(x) != 1:
+            return False
+    return True
 
-    return list(zip(mins, maxs))
+def get_cols(fields: list, tickets: list):
+    """
+    The crux of this algorithm is to create a set of all the columns that could
+    possible still satisfy each rule. These sets all start with all the columns
+    in them, but as we check every element of every row to see if they match
+    every rule, if they fail the rule, we remove that column from possibly
+    satisfying that field. At the of the algorithm we are left with only a few
+    possibilities for each set. We can then use deduction (if col 16 must be
+    departure date, then col 17 can't be departure date, etc) to figure out
+    which columns must be each field.
+    """
+
+    # Initialise sets with all the numbers
+    col_sets = [set() for x in range(len(fields))]
+    for col_set in col_sets:
+        for i in range(len(fields)):
+            col_set.add(i)
+
+    # Check every value of every ticket against every field.
+    for tickets in valid_tickets:
+        for ticket_i, ticket_value in enumerate(tickets):
+            for field_i, field in enumerate(fields):
+                if not field.in_range(ticket_value):
+                    col_sets[field_i].discard(ticket_i)
+
+    # Using deduction to determine the only possible valid columns.
+    numbers_determined = set()
+    while not all_sets_are_single_element(col_sets):
+        for s in col_sets:
+            if len(s) > 1:
+                for n in numbers_determined:
+                    s.discard(n)
+            if len(s) == 1:
+                numbers_determined.add(list(s)[0])
+
+    return [list(x)[0] for x in col_sets]
+
+
+def part_b(fields: list, our_ticket: list, valid_tickets: list):
+    cols = get_cols(fields, valid_tickets)
+
+    # Figure out what fields we want to read.
+    departure_fields = set()
+    for i, field in enumerate(fields):
+        if field.name.startswith('departure'):
+            departure_fields.add(i)
     
+    prod = 1
+    for departure_field in departure_fields:
+        prod *= our_ticket[cols[departure_field]]
+    return prod
+
+
 if __name__ == "__main__":
     fields, our_ticket, nearby_tickets = read_input('input.txt')
     print("Part A: " + str(part_a(fields, nearby_tickets)))
-    valid_tickets = [ticket for ticket in nearby_tickets if is_ticket_valid(ticket)]
-    field_ranges = get_ranges_of_fields(valid_tickets)
-    print(field_ranges)
+    valid_tickets = [ticket for ticket in nearby_tickets if is_ticket_valid(ticket, get_valid_numbers(fields))]
+    print("Part B: " + str(part_b(fields, our_ticket, valid_tickets)))
