@@ -15,9 +15,9 @@ class Field(object):
         self.name = name
 
     def in_range(self, n: int):
-        if n >= self.range1[0] and n <= self.range1[1]:
+        if self.range1[0] <= n <= self.range1[1]:
             return True
-        if n >= self.range2[0] and n <= self.range2[1]:
+        if self.range2[0] <= n <= self.range2[1]:
             return True
         return False
 
