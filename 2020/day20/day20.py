@@ -13,10 +13,20 @@ reversed, the edge stays the same). There are not, so when searching for a
 match, if you find a single matching edge, the piece is guarenteed to be the
 correct one.
 
-Note: Really feeling the pain of not having unit tests here.
+NOTE: If I knew this questions was going to be as hard as it was, I would have
+written unit tests while writing it.
+
+For Part B, after building the map, you can rotate the monster instead of the
+map, I assumed that there were no overlapping monsters (there weren't, yay) and
+used an external library to do a 2D convolution to determine how many monsters
+there were.
+
+All-in-all, quite a tough question.
 '''
 
 import copy
+import numpy as np
+from scipy.signal import convolve2d
 
 class Tile(object):
     def __init__(self, tile_id: int, image: list):
@@ -268,6 +278,8 @@ class PictureBoard(object):
         Returns a list of strings constituting the map of all pieces in their
         final positions.
         """
+        # Get max and min puzzle positions
+        map = []
         loc_x = [x[0] for x in self.tile_locations.values()]
         loc_y = [x[1] for x in self.tile_locations.values()]
         max_x = max(loc_x)
@@ -275,11 +287,26 @@ class PictureBoard(object):
         max_y = max(loc_y)
         min_y = min(loc_y)
         
+        # Re-make a dictionary that maps positions to id's instead of the other
+        # way around.
+        pos_to_id = {}
+        for tid, pos in self.tile_locations.items():
+            pos_to_id[pos] = tid
 
-
-
+        # Build up the map.
+        for y in reversed(range(min_y, max_y + 1)):
+            for i in range(1, 9):
+                map_line = ''
+                for x in range(min_x, max_x + 1):
+                    map_line += self.all_tiles[pos_to_id[(x, y)]].get_image()[i][1:-1]
+                map.append(map_line)
+                    
+        return map
 
 def read_input(file_name: str) -> dict:
+    """
+    Read input file into a dictionary of tiles keyed with the tile ID's.
+    """
     lines = []
     with open(file_name, 'r') as fb:
         for line in fb:
@@ -292,9 +319,67 @@ def read_input(file_name: str) -> dict:
 
     return tiles
 
+def get_num_monsters(map: list) -> int:
+    """
+    Return the number of monsters in the map given any orientation.
+    """
+    # Get numpy array where non-monster stops are 0 and monster spots at 1's.
+    np_map = []
+    for y in map:
+        row = []
+        for x in y:
+            if x == '#':
+                row.append(1)
+            else:
+                row.append(0)
+        np_map.append(row)
+    np_map = np.array(np_map)
+
+    # Get monster array
+    mon = ["                  # ", "#    ##    ##    ###", " #  #  #  #  #  #   "]
+    mon_np = []
+    for y in mon:
+        row = []
+        for x in y:
+            if x == '#':
+                row.append(1)
+            else:
+                row.append(0)
+        mon_np.append(row)
+    mon_np = np.array(mon_np)
+
+    # Get different translations of monster array
+    monster_positions = []
+    for x in range(4):
+        monster_positions.append(mon_np)
+        mon_np = np.rot90(mon_np)
+    mon_np = np.transpose(mon_np)
+    for x in range(4):
+        monster_positions.append(mon_np)
+        mon_np = np.rot90(mon_np)
+
+    # Find the number of monsters in each orientation until we get a non-zero
+    # number of monsters.
+    num_monsters = 0
+    for mon_pos in monster_positions:
+        a = convolve2d(np_map, mon_pos, mode='valid')
+        num_monsters = np.count_nonzero(a == 15)
+        if num_monsters != 0:
+            break
+
+    return np.sum(np_map) - (num_monsters * 15)
+
+def calculate_roughness(map: list) -> int:
+    """
+    Given the map, calculate the number of #'s that aren't in monsters.
+    """
+    return get_num_monsters(map)
+    
 if __name__ == "__main__":
     tiles = read_input('input.txt')
     picture_board = PictureBoard(tiles)
     picture_board.place_all_tiles()
     print("Part A: " + str(picture_board.part_a()))
+    map = picture_board.get_map()
+    print("Part B: " + str(calculate_roughness(map)))
     
