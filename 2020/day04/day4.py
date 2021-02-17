@@ -1,6 +1,6 @@
-'''
+"""
 Solutions for the Advent of Code - Day 4
-'''
+"""
 
 def parse_input_to_get_passport_data(input_file: str) -> list:
     d = []
@@ -23,9 +23,9 @@ def parse_input_to_get_passport_data(input_file: str) -> list:
     return d
 
 def get_valid_passports_part_a(passport_list: list) -> int:
-    '''
+    """
     Returns a list of passports valid according to the rules in part a.
-    '''
+    """
     required_fields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'] # 'cid' is simply not required.
     valid_passports = []
     for passport in passport_list:
@@ -39,9 +39,9 @@ def get_valid_passports_part_a(passport_list: list) -> int:
     return valid_passports
 
 def further_validation_part_b(passport_list: list) -> list:
-    '''
+    """
     Returns a list of passports valid according to the list in part b.
-    '''
+    """
     valid_passports = []
     
     for passport in passport_list:

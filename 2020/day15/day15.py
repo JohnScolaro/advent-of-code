@@ -1,6 +1,6 @@
-'''
+"""
 Solutions for the Advent of Code - Day 15
-'''
+"""
 
 def elf_game(starting_numbers: list, n: int) -> int:
     """

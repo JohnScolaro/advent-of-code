@@ -1,6 +1,6 @@
-'''
+"""
 Solutions for the Advent of Code - Day 6
-'''
+"""
 
 def get_inputs(input_file: str) -> list:
     list_of_groups = []

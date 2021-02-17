@@ -1,10 +1,10 @@
-'''
+"""
 Solutions for the Advent of Code - Day 11
 
 If I was coding up a more general solution, I'd make the 'find number of
 people around you sitting' function some hot-swappable function call, but
 since it's just a coding challenge, I'm not, and this appears a little hacky.
-'''
+"""
 
 def get_layout(filename: str) -> list:
     l = []
@@ -14,7 +14,7 @@ def get_layout(filename: str) -> list:
     return l
 
 def one_iteration(old_layout: list, part_a: bool) -> list:
-    """Takes the old layout, returns the new layout"""
+    """ Takes the old layout, returns the new layout """
     new_layout = old_layout[:]
     for x in range(len(old_layout[0])):
         for y in range(len(old_layout)):
@@ -48,7 +48,7 @@ def num_adjacent_occupied_seats(layout: list, position: tuple, part_a: bool) -> 
             is_seat_occupied_in_direction(layout, position, (1, -1))
 
 def is_seat_occupied(layout: list, position: tuple) -> int:
-    """Returns 1 if seat occupied, otherwise 0"""
+    """ Returns 1 if seat occupied, otherwise 0 """
     max_x = len(layout[0])
     max_y = len(layout)
     if position[0] < 0 or position[1] < 0:
@@ -61,7 +61,7 @@ def is_seat_occupied(layout: list, position: tuple) -> int:
         return 0
 
 def is_seat_occupied_in_direction(layout: list, position: tuple, direction: tuple) -> int:
-    """Returns 1 if seat occupied, otherwise 0"""
+    """ Returns 1 if seat occupied, otherwise 0 """
     max_x = len(layout[0])
     max_y = len(layout)
 

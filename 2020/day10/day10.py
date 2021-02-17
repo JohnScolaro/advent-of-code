@@ -1,11 +1,11 @@
-'''
+"""
 Solutions for the Advent of Code - Day 10
-'''
+"""
 
 import bisect
 
 def get_list(file_name: str) -> list:
-    """Turn the input file into a sorted list"""
+    """ Turn the input file into a sorted list """
     l = []
     with open(file_name, 'r') as fb:
         for line in fb:
@@ -13,7 +13,7 @@ def get_list(file_name: str) -> list:
     return l
 
 def part_a(adapter_list: list) -> int:
-    """Return number of 1 jolt differences * number of 3 jolt differences""" 
+    """ Return number of 1 jolt differences * number of 3 jolt differences """ 
     one_jolt_differences = 1
     three_jolt_differences = 1
     i = 0
@@ -28,7 +28,9 @@ def part_a(adapter_list: list) -> int:
     return one_jolt_differences * three_jolt_differences
 
 def part_b(adapter_list: list) -> int:
-    """Return the total number of combinations you can use your adapters in"""
+    """
+    Return the total number of combinations in which you can use your adapters.
+    """
     # Add 0 in to represent the wall socket
     bisect.insort_left(adapter_list, 0)
 
@@ -57,7 +59,9 @@ def part_b(adapter_list: list) -> int:
     return prod
 
 def find_perms_in_list(adapter_list: list) -> int:
-    """Recursively find the number of possible permutations :)"""
+    """
+    Recursively find the number of possible permutations :)
+    """
     if len(adapter_list) <= 2:
         return 1
     if len(adapter_list) == 3:

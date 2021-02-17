@@ -1,6 +1,6 @@
-'''
+"""
 Solutions for the Advent of Code - Day 14
-'''
+"""
 
 class Mask(object):
     """

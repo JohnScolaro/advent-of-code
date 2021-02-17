@@ -1,4 +1,4 @@
-'''
+"""
 Solutions for the Advent of Code - Day 20
 
 Two findings make this problem signifigantly easier.
@@ -22,7 +22,7 @@ used an external library to do a 2D convolution to determine how many monsters
 there were.
 
 All-in-all, quite a tough question.
-'''
+"""
 
 import copy
 import numpy as np

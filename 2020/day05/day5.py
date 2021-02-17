@@ -1,6 +1,6 @@
-'''
+"""
 Solutions for the Advent of Code - Day 5
-'''
+"""
 
 if __name__ == "__main__":
     boarding_ids = []

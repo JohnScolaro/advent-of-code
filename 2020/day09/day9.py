@@ -1,6 +1,6 @@
-'''
+"""
 Solutions for the Advent of Code - Day 9
-'''
+"""
 
 def get_list_of_numbers(file_path: str) -> list:
     l = []

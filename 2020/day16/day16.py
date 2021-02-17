@@ -1,6 +1,6 @@
-'''
+"""
 Solutions for the Advent of Code - Day 16
-'''
+"""
 
 class Field(object):
     """

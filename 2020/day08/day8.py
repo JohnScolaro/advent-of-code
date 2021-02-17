@@ -1,6 +1,6 @@
-'''
+"""
 Solutions for the Advent of Code - Day 8
-'''
+"""
 
 class State(object):
     def __init__(self):
@@ -8,7 +8,7 @@ class State(object):
         self.acc = 0
 
 def get_list_of_instructions(input_file: str) -> list:
-    '''Reads the input file into a list of strings'''
+    """ Reads the input file into a list of strings """
     list_of_instructions = []
     with open(input_file, 'r') as fb:
         for line in fb:
@@ -16,7 +16,7 @@ def get_list_of_instructions(input_file: str) -> list:
     return list_of_instructions
 
 def execute_instruction(instruction: str, state):
-    '''Executes an instruction modifying the state of the machine'''
+    """ Executes an instruction modifying the state of the machine """
     operation = instruction[:3]
     param = int(instruction[4:])
 
@@ -31,7 +31,7 @@ def execute_instruction(instruction: str, state):
         state.pc += param
 
 def run_until_first_repeat(list_of_instructions: list, state) -> int:
-    '''Run until the first time an instruction would otherwise repeat'''
+    """ Run until the first time an instruction would otherwise repeat """
     executed_instructions = []
     while True:
         executed_instructions.append(state.pc)
@@ -40,7 +40,9 @@ def run_until_first_repeat(list_of_instructions: list, state) -> int:
             return
 
 def find_acc_at_end_of_fixed_program(list_of_instructions: list) -> int:
-    """Attempt to fix the program. When it finishes successfully, return the acc"""
+    """
+    Attempt to fix the program. When it finishes successfully, return the acc.
+    """
     fix_num = 0
     while True:
         possible_fixed_program = get_fixed_instructions(list_of_instructions, fix_num)

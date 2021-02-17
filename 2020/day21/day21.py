@@ -1,9 +1,9 @@
-'''
+"""
 Solutions for the Advent of Code - Day 21
 
 An interesting question. I genuinly don't know how to solve part A without
 accidentally solving part B first.
-'''
+"""
 
 def get_foods(file_name: str):
     """

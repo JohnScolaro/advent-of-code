@@ -1,6 +1,6 @@
-'''
+"""
 Solutions for the Advent of Code - Day 1
-'''
+"""
 
 import bisect
 

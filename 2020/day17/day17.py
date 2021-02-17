@@ -1,11 +1,11 @@
-'''
+"""
 Solutions for the Advent of Code - Day 17
 
 I starting using custom point objects to solve this, but thought that most of
 the logic in this solution could be simplified by simply using sets. To do this
 we need to use immutable objects to store in the sets, so I'm using three
 tuples instead.
-'''
+"""
 
 import itertools
 

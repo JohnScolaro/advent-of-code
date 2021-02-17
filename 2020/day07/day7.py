@@ -1,6 +1,6 @@
-'''
+"""
 Solutions for the Advent of Code - Day 7
-'''
+"""
 
 class Bag(object):
     def __init__(self, bag_type):
@@ -12,7 +12,7 @@ class Bag(object):
 
 
 def build_rule_dict(input_file: str) -> dict:
-    '''
+    """
     The data structure I chose to make everything with is the most complicated thing in this function.
     Once that is understood the rest should be simple.
 
@@ -20,7 +20,7 @@ def build_rule_dict(input_file: str) -> dict:
         This dictionary has a children key whose value is a list of child dictionaries and parent strings.
             Each child dictionary is contains a 'bag_type' key and a 'n' key.
             The parent string is a list of strings of the types of bags that can contain this one.
-    '''
+    """
 
     bag_dict = {}
     with open(input_file, 'r') as fp:

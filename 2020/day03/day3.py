@@ -1,9 +1,9 @@
-'''
+"""
 Solutions for the Advent of Code - Day 3
 Tuples are all in the format (x, y) where x is horizontal distance increasing
 to the right, and y is the vertical distance nicreasing as you go down the
 slope.
-'''
+"""
 
 def is_position_a_tree(ski_slope: list, position: tuple) -> bool:
     return ski_slope[position[1]][position[0]] == '#'

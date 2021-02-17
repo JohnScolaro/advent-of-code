@@ -1,6 +1,6 @@
-'''
+"""
 Solutions for the Advent of Code - Day 12
-'''
+"""
 
 class PartAShip(object):
     def __init__(self, current_heading: str):
