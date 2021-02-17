@@ -6,7 +6,7 @@ def read_inputs(filename: str):
     l = []
     with open(filename, 'r') as fp:
         for line in fp:
-            l.append(int(line.strip()))
+            l.append(line.strip())
     return l
 
 if __name__ == "__main__":
