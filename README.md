@@ -1,3 +1,3 @@
-Here are my solutions to the advent of code 2020.
+Here are my solutions to problems from the advent of code.
 
-Simply run python3 dayX.py from the same directory as the code file. It will output results.
+Dive deeper into the particular years to see my solutions.

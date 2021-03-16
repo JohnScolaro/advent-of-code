@@ -44,6 +44,8 @@ def part_b(intcode: list):
 
 if __name__ == "__main__":
     l = read_inputs('input.txt')
+    l[1] = 12
+    l[2] = 2
     print("Part A: " + str(part_a(l)))
     print("Part B: " + str(part_b(l)))
     
