@@ -1,3 +1,6 @@
 {
-    "python.analysis.extraPaths": ["/Users/sco301/code/advent-of-code/2019"]
+    "python.analysis.extraPaths": [
+        "/Users/sco301/code/advent-of-code/2019",
+        "/Users/sco301/code/advent-of-code/2019/intcode"
+    ]
 }
