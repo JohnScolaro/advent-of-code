@@ -6,12 +6,14 @@ people around you sitting' function some hot-swappable function call, but
 since it's just a coding challenge, I'm not, and this appears a little hacky.
 """
 
+
 def get_layout(filename: str) -> list:
-    l = []
+    layout = []
     with open(filename, 'r') as fb:
         for line in fb:
-            l.append(line[:-1])
-    return l
+            layout.append(line[:-1])
+    return layout
+
 
 def one_iteration(old_layout: list, part_a: bool) -> list:
     """ Takes the old layout, returns the new layout """
@@ -26,6 +28,7 @@ def one_iteration(old_layout: list, part_a: bool) -> list:
                     new_layout[y] = new_layout[y][:x] + 'L' + new_layout[y][x+1:]
 
     return new_layout
+
 
 def num_adjacent_occupied_seats(layout: list, position: tuple, part_a: bool) -> list:
     if part_a:
@@ -47,6 +50,7 @@ def num_adjacent_occupied_seats(layout: list, position: tuple, part_a: bool) -> 
             is_seat_occupied_in_direction(layout, position, (-1, 1)) + \
             is_seat_occupied_in_direction(layout, position, (1, -1))
 
+
 def is_seat_occupied(layout: list, position: tuple) -> int:
     """ Returns 1 if seat occupied, otherwise 0 """
     max_x = len(layout[0])
@@ -59,6 +63,7 @@ def is_seat_occupied(layout: list, position: tuple) -> int:
         return 1
     else:
         return 0
+
 
 def is_seat_occupied_in_direction(layout: list, position: tuple, direction: tuple) -> int:
     """ Returns 1 if seat occupied, otherwise 0 """
@@ -79,6 +84,7 @@ def is_seat_occupied_in_direction(layout: list, position: tuple, direction: tupl
             return 0
         position = (position[0] + direction[0], position[1] + direction[1])
 
+
 def layouts_equal(old_layout: list, new_layout: list) -> bool:
     """ Tests to see if two layouts are equal or not """
     for i in range(len(old_layout)):
@@ -86,12 +92,14 @@ def layouts_equal(old_layout: list, new_layout: list) -> bool:
             return False
     return True
 
+
 def number_of_occupied_seats(layout: list) -> int:
     """ Returns the number of occupied seats in a layout """
     count = 0
     for x in layout:
         count += x.count('#')
     return count
+
 
 def num_occupied_seats_at_stable_solution(layout: list, part_a: bool) -> int:
     """
@@ -112,8 +120,8 @@ def num_occupied_seats_at_stable_solution(layout: list, part_a: bool) -> int:
             new_layout = one_iteration(old_layout, part_a)
         i += 1
 
+
 if __name__ == "__main__":
     layout = get_layout('input.txt')
     print("Part A: " + str(num_occupied_seats_at_stable_solution(layout, True)))
     print("Part B: " + str(num_occupied_seats_at_stable_solution(layout, False)))
-    

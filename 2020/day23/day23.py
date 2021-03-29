@@ -24,6 +24,7 @@ class Cup():
         self.label = None
         self.next = None
 
+
 def setup_linked_list(cups: list) -> dict:
     """
     Create a dictionary of cups. The key is the label and the value is the cup.
@@ -36,13 +37,15 @@ def setup_linked_list(cups: list) -> dict:
     d.default_factory = None
     return d
 
+
 def do_crab_move(cups: dict, selected_cup: int) -> int:
     """
     Manipulate the linked list to do a single crab move.
     """
     picked_up_last_cup = cups[selected_cup].next.next.next
     picked_up_first_cup = cups[selected_cup].next
-    picked_up_cups = [cups[selected_cup].next.label, cups[selected_cup].next.next.label, cups[selected_cup].next.next.next.label]
+    picked_up_second_cup = cups[selected_cup].next.next
+    picked_up_cups = [picked_up_first_cup.label, picked_up_second_cup.label, picked_up_last_cup.label]
     # Remove picked up cups from the ring
     cups[selected_cup].next = cups[selected_cup].next.next.next.next
     # Calculate destination cup
@@ -59,6 +62,7 @@ def do_crab_move(cups: dict, selected_cup: int) -> int:
     # Return next selected cup
     return cups[selected_cup].next.label
 
+
 def get_submission_string(cups: dict) -> str:
     """
     This returns the submission string for part A of the coding challenge
@@ -69,6 +73,7 @@ def get_submission_string(cups: dict) -> str:
         c = c.next
         out_str += str(c.label)
     return out_str
+
 
 def part_a() -> list:
     """
@@ -84,6 +89,7 @@ def part_a() -> list:
         current_cup = do_crab_move(cups, current_cup)
     # Return answer
     return get_submission_string(cups)
+
 
 def part_b():
     """

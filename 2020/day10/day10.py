@@ -4,16 +4,18 @@ Solutions for the Advent of Code - Day 10
 
 import bisect
 
-def get_list(file_name: str) -> list:
+
+def get_sorted_input(file_name: str) -> list:
     """ Turn the input file into a sorted list """
-    l = []
+    s = []
     with open(file_name, 'r') as fb:
         for line in fb:
-            bisect.insort_left(l, int(line[:-1]))
-    return l
+            bisect.insort_left(s, int(line[:-1]))
+    return s
+
 
 def part_a(adapter_list: list) -> int:
-    """ Return number of 1 jolt differences * number of 3 jolt differences """ 
+    """ Return number of 1 jolt differences * number of 3 jolt differences """
     one_jolt_differences = 1
     three_jolt_differences = 1
     i = 0
@@ -26,6 +28,7 @@ def part_a(adapter_list: list) -> int:
         i += 1
 
     return one_jolt_differences * three_jolt_differences
+
 
 def part_b(adapter_list: list) -> int:
     """
@@ -58,6 +61,7 @@ def part_b(adapter_list: list) -> int:
 
     return prod
 
+
 def find_perms_in_list(adapter_list: list) -> int:
     """
     Recursively find the number of possible permutations :)
@@ -66,10 +70,12 @@ def find_perms_in_list(adapter_list: list) -> int:
         return 1
     if len(adapter_list) == 3:
         return 2
-    return find_perms_in_list(adapter_list[1:]) + find_perms_in_list(adapter_list[2:]) + find_perms_in_list(adapter_list[3:])
+    return find_perms_in_list(adapter_list[1:]) + \
+        find_perms_in_list(adapter_list[2:]) + \
+        find_perms_in_list(adapter_list[3:])
+
 
 if __name__ == "__main__":
-    l = get_list('input.txt')
-    print("Part A: " + str(part_a(l)))
-    print("Part B: " + str(part_b(l)))
-    
+    s = get_sorted_input('input.txt')
+    print("Part A: " + str(part_a(s)))
+    print("Part B: " + str(part_b(s)))

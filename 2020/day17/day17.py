@@ -9,6 +9,7 @@ tuples instead.
 
 import itertools
 
+
 def get_starting_active_points(input_file: str, dims: int) -> set:
     """ Takes input file and returns a set of active points """
     s = set()
@@ -16,22 +17,24 @@ def get_starting_active_points(input_file: str, dims: int) -> set:
         for y, line in enumerate(fb):
             for x, char in enumerate(line.strip()):
                 if char == '#':
-                    l = [x, y]
+                    tmp_list = [x, y]
                     for _ in range(dims-2):
-                        l.append(0)
-                    s.add(tuple(l))
+                        tmp_list.append(0)
+                    s.add(tuple(tmp_list))
     return s
 
+
 def get_neighbours(point: tuple) -> set:
-    """ Takes a points and returns a set of all neighbours """
-    l = [list() for x in range(len(point))]
+    """ Takes a point and returns a set of all neighbours """
+    lists = [list() for _ in range(len(point))]
     for i, n in enumerate(point):
-        l[i].append(n - 1)
-        l[i].append(n)
-        l[i].append(n + 1)
-    s = set(itertools.product(*l))
+        lists[i].append(n - 1)
+        lists[i].append(n)
+        lists[i].append(n + 1)
+    s = set(itertools.product(*lists))
     s.remove(point)
     return s
+
 
 def tick_in_game_time(active_points: set) -> set:
     """
@@ -58,6 +61,7 @@ def tick_in_game_time(active_points: set) -> set:
             future_active_points.add(neighbor)
 
     return future_active_points
+
 
 def execute_n_ticks(active_points: set, n) -> set:
     """ Execute n ticks in game time """

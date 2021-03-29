@@ -2,6 +2,7 @@
 Solutions for the Advent of Code - Day 22
 """
 
+
 def get_decks(file_name: str):
     """ Return two lists representing each deck """
     deck_1 = []
@@ -19,6 +20,7 @@ def get_decks(file_name: str):
 
     return ([int(x) for x in deck_1[1:]], [int(x) for x in deck_2[1:]])
 
+
 def is_game_done(deck_1: list, deck_2: list) -> int:
     """
     Return 0 if the game is not done, 1 if player 1 wins, and 2 if player
@@ -30,6 +32,7 @@ def is_game_done(deck_1: list, deck_2: list) -> int:
         return 1
     return 0
 
+
 def carry_out_normal_round(deck_1: list, deck_2: list) -> None:
     """ Carry out a round of easy non-recursive combat """
     player_1_plays = deck_1[0]
@@ -39,17 +42,18 @@ def carry_out_normal_round(deck_1: list, deck_2: list) -> None:
 
     if player_1_plays > player_2_plays:
         deck_1 = deck_1 + [player_1_plays, player_2_plays]
-        
     else:
         deck_2 = deck_2 + [player_2_plays, player_1_plays]
 
     return (deck_1, deck_2)
+
 
 def carry_out_normal_game(deck_1: list, deck_2: list) -> None:
     """ Carry out a game of non-recursive combat to completion """
     while not is_game_done(deck_1, deck_2):
         deck_1, deck_2 = carry_out_normal_round(deck_1, deck_2)
     return (deck_1, deck_2)
+
 
 def part_a(deck_1: list, deck_2: list) -> int:
     """
@@ -58,6 +62,7 @@ def part_a(deck_1: list, deck_2: list) -> int:
     deck_1, deck_2 = carry_out_normal_game(deck_1, deck_2)
     deck = deck_1 if len(deck_1) != 0 else deck_2
     return sum([value * (multiplier + 1) for multiplier, value in enumerate(reversed(deck))])
+
 
 def carry_out_recursive_game(deck_1: list, deck_2: list) -> tuple:
     """
@@ -78,7 +83,7 @@ def carry_out_recursive_game(deck_1: list, deck_2: list) -> tuple:
         if [deck_1, deck_2] in history:
             return (deck_1, deck_2, 1)
         history.append([deck_1, deck_2])
-        
+
         # Carry out a recursive round
         player_1_plays = deck_1[0]
         player_2_plays = deck_2[0]
@@ -92,7 +97,7 @@ def carry_out_recursive_game(deck_1: list, deck_2: list) -> tuple:
         else:
             # Otherwise it's a normal game
             winner = 1 if player_1_plays > player_2_plays else 2
-        
+
         # Add cards to the bottom of the winners deck
         if winner == 1:
             deck_1 += [player_1_plays, player_2_plays]

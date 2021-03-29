@@ -2,6 +2,7 @@
 Solutions for the Advent of Code - Day 15
 """
 
+
 def elf_game(starting_numbers: list, n: int) -> int:
     """
     Returns the n'th number in the sequence.
@@ -30,6 +31,7 @@ def elf_game(starting_numbers: list, n: int) -> int:
         turn_count += 1
 
     return this_number
+
 
 if __name__ == "__main__":
     starting_numbers = [7, 14, 0, 17, 11, 1, 2]

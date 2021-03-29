@@ -12,13 +12,18 @@ dumb 'equation modifier' to modify the equation by adding brackets so that
 the stack calculator actually CAN parse it.
 """
 
-def read_input(file_name: str):
+
+from typing import List
+
+
+def read_input(file_name: str) -> List[str]:
     """ Reads input into a list of strings. Removes whitespace. """
-    l = []
+    input = []
     with open(file_name, 'r') as fb:
         for line in fb:
-            l.append(line.strip().replace(' ', ''))
-    return l
+            input.append(line.strip().replace(' ', ''))
+    return input
+
 
 def part_a_stack_calculator(equation: str):
     """ A stack calculator for solving part A """
@@ -55,13 +60,14 @@ def part_a_stack_calculator(equation: str):
                 current_value = current_value * number_stack.pop()
             if current_operator == '+':
                 current_value = current_value + number_stack.pop()
-        
+
         elif char == '+':
             current_operator = '+'
         elif char == '*':
             current_operator = '*'
 
     return current_value
+
 
 def part_b_equation_modifier(equation: str) -> str:
     """
@@ -99,17 +105,20 @@ def part_b_equation_modifier(equation: str) -> str:
     string += ')' * brackets_added
     return string
 
+
 def part_a(all_equations: list) -> int:
     sum_of_all_equations = 0
     for equation in all_equations:
         sum_of_all_equations += part_a_stack_calculator(equation)
     return sum_of_all_equations
 
+
 def part_b(all_equations: list) -> int:
     sum_of_all_equations = 0
     for equation in all_equations:
         sum_of_all_equations += part_a_stack_calculator(part_b_equation_modifier(equation))
     return sum_of_all_equations
+
 
 if __name__ == "__main__":
     all_equations = read_input('input.txt')

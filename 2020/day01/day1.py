@@ -3,10 +3,13 @@ Solutions for the Advent of Code - Day 1
 """
 
 import bisect
+from typing import List
 
-def find_numbers_that_sum_to_goal(input_file: str, n: int, goal: int):
-    """Find n numbers that sum to create another number from an input file
-    
+
+def find_numbers_that_sum_to_goal(input_file: str, n: int, goal: int) -> None:
+    """
+    Find n numbers that sum to create another number from an input file.
+
     Args:
         input_file (str): File to get numbers from.
         n (int): Number of numbers to sum together.
@@ -21,13 +24,13 @@ def find_numbers_that_sum_to_goal(input_file: str, n: int, goal: int):
         return
 
     # Create a sorted list from the input files
-    sorted_list = []
+    sorted_list: List[int] = []
     with open('input.txt', 'r') as fp:
         for line in fp:
             bisect.insort_left(sorted_list, int(line))
 
-    # Recursively select numbers from the sorted list and test to see if they sum to make x. 
-    numbers_selected = []
+    # Recursively select numbers from the sorted list and test to see if they sum to make x.
+    numbers_selected: List[int] = []
 
     if select_new_number(sorted_list, numbers_selected, n, goal):
         print_output(numbers_selected)
@@ -35,13 +38,13 @@ def find_numbers_that_sum_to_goal(input_file: str, n: int, goal: int):
         print("No valid combinations.")
     return
 
-def select_new_number(sorted_list: list, numbers_selected: list, n: int, goal: int):
+
+def select_new_number(sorted_list: List[int], numbers_selected: List[int], n: int, goal: int) -> bool:
     """
     If n is 5, we are selecting 5 numbers to sum together to equal something.
     This function is called once for each number, and it iterates through all the
     possible numbers that it could be.
     """
-
     for i in range(len(sorted_list)):
         # Pop number out of the sorted list and put it into our selection array
         selected_number = sorted_list.pop(i)
@@ -63,11 +66,12 @@ def select_new_number(sorted_list: list, numbers_selected: list, n: int, goal: i
             if select_new_number(sorted_list[0:index_of_max_number], numbers_selected, n, goal):
                 return True
             else:
-                # If we get here, then none of the combinations work with this number, so put it back into the list and continue
+                # None of the combinations work with this number. Put it back into the list and continue
                 numbers_selected.pop()
                 bisect.insort_left(sorted_list, selected_number)
 
     return False
+
 
 def print_output(output_array: list):
     """Prints the output in readable form."""
@@ -91,4 +95,4 @@ def print_output(output_array: list):
 if __name__ == "__main__":
     find_numbers_that_sum_to_goal("input.txt", 2, 2020)
     find_numbers_that_sum_to_goal("input.txt", 3, 2020)
-    # There exist combinations for 4 and 5 numbers, but none more that I could find.    
+    # There exist combinations for 4 and 5 numbers, but none more that I could find.

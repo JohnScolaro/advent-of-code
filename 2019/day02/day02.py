@@ -2,21 +2,25 @@
 Problem 2 of the Advent-of-Code 2019
 """
 
-import sys, os
+import sys
+import os
 import itertools
+from typing import List
 
 sys.path.insert(1, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from intcode.computer import IntCodeComputer, IntCodeComputerError
+from intcode.computer import IntCodeComputer
+from intcode.computer import IntCodeComputerError
 from intcode.computer import DEFAULT_OPCODES
 
-def read_inputs(filename: str) -> list:
+
+def read_inputs(filename: str) -> List[int]:
     """ Reads puzzle input into a list of ints """
-    l = []
+    input = []
     with open(filename, 'r') as fp:
         for line in fp:
-            l.append(line.strip())
-    l = [int(x) for x in l[0].split(',')]
-    return l
+            input.append(line.strip())
+    return [int(x) for x in input[0].split(',')]
+
 
 def part_a(intcode: list):
     """ Run the intcode computer and return the result for part A """
@@ -28,6 +32,7 @@ def part_a(intcode: list):
         return -1
     else:
         return computer.program_code[0]
+
 
 def part_b(intcode: list):
     """
@@ -43,9 +48,8 @@ def part_b(intcode: list):
 
 
 if __name__ == "__main__":
-    l = read_inputs('input.txt')
-    l[1] = 12
-    l[2] = 2
-    print("Part A: " + str(part_a(l)))
-    print("Part B: " + str(part_b(l)))
-    
+    input = read_inputs('input.txt')
+    input[1] = 12
+    input[2] = 2
+    print("Part A: " + str(part_a(input)))
+    print("Part B: " + str(part_b(input)))

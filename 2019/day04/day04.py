@@ -3,8 +3,10 @@ Problem 4 of the Advent-of-Code 2019
 """
 
 from collections import Counter
+from typing import Tuple
 
-def read_inputs(filename: str) -> tuple:
+
+def read_inputs(filename: str) -> Tuple:
     """
     Reads the input file which will contain a single line: 'xxxxxx-xxxxxx'
     where x's are actually numbers. This function returns a tuple with the two
@@ -18,12 +20,14 @@ def read_inputs(filename: str) -> tuple:
     max = int(l[0].split('-')[1])
     return (min, max)
 
+
 def generate_possible_numbers(min: int, max: int) -> set:
     """
     Returns a set of all possible numbers between but not including the two
     initial max and min numbers.
     """
     return set(range(min + 1, max))
+
 
 def remove_numbers_without_duplicates(possible_numbers: set) -> None:
     """
@@ -42,11 +46,12 @@ def remove_numbers_without_duplicates(possible_numbers: set) -> None:
     for number_to_remove in numbers_to_remove:
         possible_numbers.remove(number_to_remove)
 
+
 def remove_non_increasing_numbers(possible_numbers: set) -> None:
     """
     Takes a set of numbers and modifies that set inline to remove any numbers
     that contains consecutive digits that decrease. Increasing and staying the
-    same are both acceptable. 
+    same are both acceptable.
     """
     numbers_to_remove = set()
     for possible_number in possible_numbers:
@@ -56,6 +61,7 @@ def remove_non_increasing_numbers(possible_numbers: set) -> None:
                 numbers_to_remove.add(possible_number)
     for number_to_remove in numbers_to_remove:
         possible_numbers.remove(number_to_remove)
+
 
 def remove_non_twin_numbers(possible_numbers: set) -> None:
     """
@@ -75,6 +81,7 @@ def remove_non_twin_numbers(possible_numbers: set) -> None:
     for number_to_remove in numbers_to_remove:
         possible_numbers.remove(number_to_remove)
 
+
 def part_a(filename: str) -> set:
     """
     For part A of this challenge we are finding the total number of possible
@@ -86,6 +93,7 @@ def part_a(filename: str) -> set:
     remove_numbers_without_duplicates(possible_numbers)
     remove_non_increasing_numbers(possible_numbers)
     return possible_numbers
+
 
 def part_b(filename: str) -> set:
     """
@@ -100,4 +108,3 @@ def part_b(filename: str) -> set:
 if __name__ == "__main__":
     print("Part A: " + str(len(part_a('input.txt'))))
     print("Part B: " + str(len(part_b('input.txt'))))
-    

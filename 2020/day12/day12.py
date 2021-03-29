@@ -2,6 +2,7 @@
 Solutions for the Advent of Code - Day 12
 """
 
+
 class PartAShip(object):
     def __init__(self, current_heading: str):
         self.current_heading = current_heading
@@ -34,6 +35,7 @@ class PartAShip(object):
             self._rotate('R', value)
         if command == 'F':
             self.handle_instruction(self.current_heading, value)
+
 
 class PartBShip(object):
     def __init__(self, waypoint_relative_loc: tuple):
@@ -74,11 +76,13 @@ class PartBShip(object):
         if command == 'F':
             self.total_movement_north += self.waypoint_north * value
             self.total_movement_east += self.waypoint_east * value
-        
+
+
 def parse_instruction(instruction: str) -> tuple:
     command = instruction[0]
     value = int(instruction[1:])
     return (command, value)
+
 
 def get_navigation_instructions(input_file: str) -> list:
     nav_inst = []
@@ -86,6 +90,7 @@ def get_navigation_instructions(input_file: str) -> list:
         for line in fb:
             nav_inst.append(line[:-1])
     return nav_inst
+
 
 def run_ship_through_all_instructions(list_of_instructions: list, ship):
     for instruction in navigation_instructions:
@@ -96,7 +101,7 @@ def run_ship_through_all_instructions(list_of_instructions: list, ship):
 
 if __name__ == "__main__":
     navigation_instructions = get_navigation_instructions('input.txt')
-    
+
     # Part A
     a_ship = PartAShip('E')
     print("Part A: " + str(run_ship_through_all_instructions(navigation_instructions, a_ship)))
@@ -104,4 +109,3 @@ if __name__ == "__main__":
     # Part B
     b_ship = PartBShip((1, 10))
     print("Part B: " + str(run_ship_through_all_instructions(navigation_instructions, b_ship)))
-    

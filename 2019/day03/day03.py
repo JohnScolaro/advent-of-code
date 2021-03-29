@@ -3,19 +3,28 @@ Problem 3 of the Advent-of-Code 2019
 """
 
 from collections import defaultdict
+from typing import List
 
-def read_inputs(filename: str):
-    l = []
+
+def read_inputs(filename: str) -> List[str]:
+    """
+    Reads from filename a list of strings. The list has only two lines though,
+    the first and second line of the input file. Further splitting on ','s is
+    done later.
+    """
+    input = []
     with open(filename, 'r') as fp:
         for line in fp:
-            l.append(line.strip())
-    return l
+            input.append(line.strip())
+    return input
+
 
 def get_instructions_from_string(string_of_instructions: str) -> list:
     """
     Returns a list of tuples like so: ('U', 3)
     """
     return [(x[0], int(x[1:])) for x in string_of_instructions.split(',')]
+
 
 def get_all_coords_with_wire_on_them(list_of_instructions: list) -> dict:
     """
@@ -51,6 +60,7 @@ def get_all_coords_with_wire_on_them(list_of_instructions: list) -> dict:
     wire_positions[loc].append(time)
     return dict(wire_positions)
 
+
 def part_a(wire_paths: list):
     """
     Find all the crossings, then return the manhattan distance of the crossing
@@ -59,12 +69,13 @@ def part_a(wire_paths: list):
     wire_1_locs = set(get_all_coords_with_wire_on_them(get_instructions_from_string(wire_paths[0])).keys())
     wire_2_locs = set(get_all_coords_with_wire_on_them(get_instructions_from_string(wire_paths[1])).keys())
     crossings = wire_1_locs.intersection(wire_2_locs)
-    crossings.remove((0, 0)) # Remove origin point
+    crossings.remove((0, 0))  # Remove origin point
     crossings = list(crossings)
     m_distances = [abs(x[0]) + abs(x[1]) for x in crossings]
     min_crossing = crossings[m_distances.index(min(m_distances))]
     return (abs(min_crossing[0]) + abs(min_crossing[1]))
-    
+
+
 def part_b(wire_paths: list):
     """
     Find all the crossings, but at the total combined 'time' for the signal to
@@ -75,7 +86,7 @@ def part_b(wire_paths: list):
     wire_1_locs = set(wire_1_dict.keys())
     wire_2_locs = set(wire_2_dict.keys())
     crossings = wire_1_locs.intersection(wire_2_locs)
-    crossings.remove((0, 0)) # Remove origin point
+    crossings.remove((0, 0))  # Remove origin point
     crossings = list(crossings)
     list_of_combined_times = []
     for crossing in crossings:
@@ -83,7 +94,8 @@ def part_b(wire_paths: list):
             list_of_combined_times.append(wire_1_dict[crossing][i] + wire_2_dict[crossing][i])
     return min(list_of_combined_times)
 
+
 if __name__ == "__main__":
-    l = read_inputs('input.txt')
-    print("Part A: " + str(part_a(l)))
-    print("Part B: " + str(part_b(l)))
+    input = read_inputs('input.txt')
+    print("Part A: " + str(part_a(input)))
+    print("Part B: " + str(part_b(input)))

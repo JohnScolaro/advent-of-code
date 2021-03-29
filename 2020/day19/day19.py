@@ -37,6 +37,8 @@ chunks are in the corresponding sets of Rules 42 and 31 according to dot point
 """
 
 import itertools
+from typing import List, Tuple
+
 
 class Rule(object):
     def __init__(self, rule_num: int, rule: str):
@@ -69,25 +71,27 @@ class Rule(object):
         """
         s = set()
         if " " in rule:
-            l = []
+            x = []
             for individual_match in rule.split(" "):
-                if (int(individual_match) == self.rule_num): # Congrats we have a loop
+                if (int(individual_match) == self.rule_num):  # Congrats we have a loop
                     continue
                 matches = rule_set[int(individual_match)].generate_matching_string(rule_set)
-                l.append(matches)
-            s = s | set([''.join(x) for x in itertools.product(*l)])
+                x.append(matches)
+            s = s | set([''.join(x) for x in itertools.product(*x)])
         else:
             # Single rule
             s = s | rule_set[int(rule)].generate_matching_string(rule_set)
         return s
 
-def read_input(file_name: str):
+
+def read_input(file_name: str) -> Tuple(List[str], List[str]):
     """ Reads input into list of rule lines and list of message lines """
-    l = []
+    lines = []
     with open(file_name, 'r') as fb:
         for line in fb:
-            l.append(line.strip())
-    return (l[:135], l[136:])
+            lines.append(line.strip())
+    return (lines[:135], lines[136:])
+
 
 def rule_parser(rules: list) -> dict:
     """ Takes a list of rule strings, and returns a set of list objects """
@@ -95,6 +99,7 @@ def rule_parser(rules: list) -> dict:
     for rule in rules:
         r[int(rule.split(':')[0])] = Rule(int(rule.split(':')[0]), rule.split(':')[1][1:])
     return r
+
 
 def number_of_matches_part_a(matches: set, messages: list, rule_set: dict) -> int:
     """
@@ -108,27 +113,28 @@ def number_of_matches_part_a(matches: set, messages: list, rule_set: dict) -> in
             s += 1
     return s
 
+
 def number_of_matches_part_b(messages: list, rule_set: dict) -> bool:
     """
     We use a different method of counting matches for part B.
     """
     s = 0
     for message in messages:
-        message_decomp = [(message[i:i+8]) for i in range(0, len(message), 8)] 
-        l = []
-        l.append(rule_set[42].generate_matching_string(rule_set))
-        l.append(rule_set[31].generate_matching_string(rule_set))
+        message_decomp = [(message[i:i+8]) for i in range(0, len(message), 8)]
+        x = []
+        x.append(rule_set[42].generate_matching_string(rule_set))
+        x.append(rule_set[31].generate_matching_string(rule_set))
         m_flag = True
         n = 0
         for i, m in enumerate(message_decomp):
-            if m not in l[n]:
-                if i <= len(message_decomp) / 2: # If we switch to rule 31 before or at half way
+            if m not in x[n]:
+                if i <= len(message_decomp) / 2:  # If we switch to rule 31 before or at half way
                     m_flag = False
                     break
-                if n == 1: # If Rule 31 doesn't work
+                if n == 1:  # If Rule 31 doesn't work
                     m_flag = False
                     break
-                if m not in l[n+1]:
+                if m not in x[n+1]:
                     m_flag = False
                     break
                 else:

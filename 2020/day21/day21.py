@@ -5,22 +5,27 @@ An interesting question. I genuinly don't know how to solve part A without
 accidentally solving part B first.
 """
 
-def get_foods(file_name: str):
+
+from typing import Dict, List
+
+
+def get_foods(file_name: str) -> List[Dict[str, List[str]]]:
     """
     Gets a list of foods. Each element of the list is a dictionary with two
     keys. The value corresponding to the 'ingredients' key is a list of
     ingredient strings. The value corresponding to the 'allergens' key is a
     list of allergen strings.
     """
-    l = []
+    input_list = []
     with open(file_name, 'r') as fb:
         for line in fb:
             line = line[:-1]
             ingredients = line.split('(')[0].split(' ')[:-1]
             may_contain = line.split('(')[1].replace('contains ', '').replace(')', '').split(', ')
-            d = {'ingredients': ingredients , 'allergens': may_contain}
-            l.append(d)
-    return l
+            d = {'ingredients': ingredients, 'allergens': may_contain}
+            input_list.append(d)
+    return input_list
+
 
 def get_all_allergens(foods: dict) -> set:
     """ Returns a set of all allergens """
@@ -30,15 +35,13 @@ def get_all_allergens(foods: dict) -> set:
             s.add(allergen)
     return s
 
+
 def get_foods_with_allergen(foods: list, allergen: str) -> dict:
     """
     Returns a list of foods, but only foods that contains the specified allergen.
     """
-    l = []
-    for food in foods:
-        if allergen in food['allergens']:
-            l.append(food)
-    return l
+    return [food for food in foods if allergen in food['allergens']]
+
 
 def get_common_ingredients(foods: list) -> set:
     """ Get the common ingredients between a list of foods. """
@@ -49,6 +52,7 @@ def get_common_ingredients(foods: list) -> set:
         else:
             s = s.intersection(set(food['ingredients']))
     return s
+
 
 def get_allergen_to_ingredient_map(foods: list) -> int:
     """
@@ -87,7 +91,7 @@ def get_allergen_to_ingredient_map(foods: list) -> int:
 
     for a, i in allergens_with_common_ingredients.items():
         allergens_with_common_ingredients[a] = next(iter(i))
-    
+
     return allergens_with_common_ingredients
 
 
@@ -102,11 +106,13 @@ def part_a(foods: list) -> int:
                 counter += 1
     return counter
 
+
 def part_b(foods: list) -> str:
     """ Returns part B's answer """
     allergen_to_ingredient_mapping = get_allergen_to_ingredient_map(foods)
     allergens = sorted(allergen_to_ingredient_mapping.keys())
     return ','.join([allergen_to_ingredient_mapping[a] for a in allergens])
+
 
 if __name__ == "__main__":
     foods = get_foods('input.txt')

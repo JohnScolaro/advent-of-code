@@ -2,13 +2,18 @@
 Problem 1 of the Advent-of-Code 2019
 """
 
-def read_inputs(filename: str) -> list:
+
+from typing import List
+
+
+def read_inputs(filename: str) -> List[int]:
     """ Read module weights in as a list of ints """
-    l = []
+    input = []
     with open(filename, 'r') as fp:
         for line in fp:
-            l.append(int(line.strip()))
-    return l
+            input.append(int(line.strip()))
+    return input
+
 
 def part_a(module_weights: int) -> int:
     """ Calculate weight of fuel needed for each module and add together """
@@ -16,6 +21,7 @@ def part_a(module_weights: int) -> int:
     for module_weight in module_weights:
         sum_of_fuel += ((module_weight // 3) - 2)
     return sum_of_fuel
+
 
 def part_b(module_weights: int) -> int:
     """
@@ -36,7 +42,8 @@ def part_b(module_weights: int) -> int:
         sum_of_fuel += total_fuel_for_this_module
     return sum_of_fuel
 
+
 if __name__ == "__main__":
-    l = read_inputs('input.txt')
-    print("Part A: " + str(part_a(l)))
-    print("Part B: " + str(part_b(l)))
+    input = read_inputs('input.txt')
+    print("Part A: " + str(part_a(input)))
+    print("Part B: " + str(part_b(input)))

@@ -2,6 +2,7 @@
 Solutions for the Advent of Code - Day 6
 """
 
+
 def get_inputs(input_file: str) -> list:
     list_of_groups = []
     with open('input.txt', 'r') as fp:
@@ -14,6 +15,7 @@ def get_inputs(input_file: str) -> list:
                 list_of_people.append(line[:-1])
         list_of_groups.append(list_of_people)
     return list_of_groups
+
 
 if __name__ == "__main__":
     groups = get_inputs('input.txt')
@@ -41,7 +43,3 @@ if __name__ == "__main__":
             group_string = person_string
         num_yes_in_group.append(len(group_string))
     print(sum(num_yes_in_group))
-
-        
-        
-

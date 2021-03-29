@@ -28,6 +28,7 @@ import copy
 import numpy as np
 from scipy.signal import convolve2d
 
+
 class Tile(object):
     def __init__(self, tile_id: int, image: list):
         # The ID of the tile
@@ -44,7 +45,7 @@ class Tile(object):
     def get_edge(self, edge: tuple) -> str:
         """
         Return edge as a string
-        
+
         Args:
             edge (tuple):   (1, 0) = right
                             (-1, 0) = left
@@ -53,13 +54,13 @@ class Tile(object):
 
         Edge is always read from left to right, or from top to bottom.
         """
-        if edge == (1, 0): # Right
+        if edge == (1, 0):  # Right
             return ''.join(x[-1] for x in self.image)
-        elif edge == (-1, 0): # Left
+        elif edge == (-1, 0):  # Left
             return ''.join(x[0] for x in self.image)
-        elif edge == (0, 1): # Top
+        elif edge == (0, 1):  # Top
             return self.image[0]
-        elif edge == (0, -1): # Bottom
+        elif edge == (0, -1):  # Bottom
             return self.image[-1]
         else:
             raise Exception("Invalid edge of: {} received".format(edge))
@@ -94,7 +95,7 @@ class Tile(object):
         new_image = copy.deepcopy(self.raw_image)
         if self.flipped:
             new_image = [''.join(reversed(row)) for row in self.raw_image]
-        
+
         for _ in range(self.orientation):
             new_image = self.perform_rotation(new_image)
         return new_image
@@ -106,6 +107,7 @@ class Tile(object):
             for col in reversed(range(size)):
                 new_image[row] += image[col][row]
         return new_image
+
 
 class PictureBoard(object):
     def __init__(self, all_tiles: dict):
@@ -127,8 +129,8 @@ class PictureBoard(object):
         self.tile_locations = {}
 
         # Dict of open spaces on the board for possible tile placements.
-        # Key is coordinates, value is dict of edges that must match. 
-        # (x, y): {(0, 1): 'xxxxxx', (0, -1): 'yyyyyy}} 
+        # Key is coordinates, value is dict of edges that must match.
+        # (x, y): {(0, 1): 'xxxxxx', (0, -1): 'yyyyyy}}
         self.open_tile_positions = {}
         self.open_tile_positions[(0, 0)] = {}
 
@@ -143,14 +145,12 @@ class PictureBoard(object):
         """ Assuming no tiles are currently placed, place all tiles one by one. """
         # Place first tile at origin.
         initial_tile_id = next(iter(self.all_tiles))
-        initial_tile = self.all_tiles[initial_tile_id]
         self.place_single_tile((0, 0), initial_tile_id)
 
         # Place more tiles until all placed.
         while len(self.unplaced_tiles) != 0:
             possible_location, tile_id = self.get_placable_tile()
             self.place_single_tile(possible_location, tile_id)
-
 
     def place_single_tile(self, location: tuple, tile_id: int) -> None:
         """
@@ -170,7 +170,7 @@ class PictureBoard(object):
             if possible_open_position not in self.open_tile_positions:
                 if possible_open_position not in self.tile_locations.values():
                     self.open_tile_positions[possible_open_position] = {}
-        
+
         # Add edges to open tiles. Only add them if there isn't already a tile in the position.
         if (x + 1, y) not in self.tile_locations.values():
             self.open_tile_positions[(x + 1, y)][(-1, 0)] = tile.get_edge((1, 0))
@@ -218,7 +218,7 @@ class PictureBoard(object):
 
         # Rotate matching tile into correct position.
         edges_to_connect = self.open_tile_positions[matching_position]
-        
+
         # Get edge position
         edge_position = (0, 0)
         for ep, edge in edges_to_connect.items():
@@ -250,7 +250,6 @@ class PictureBoard(object):
         # Tile now in correct orientation so we can return
         return (matching_position, matching_tile.tile_id)
 
-
     def get_corner_positions(self) -> list:
         """
         Returns a list of the four (x, y) tuples that correspond to the
@@ -263,7 +262,7 @@ class PictureBoard(object):
         max_y = max(loc_y)
         min_y = min(loc_y)
         return [(min_x, min_y), (min_x, max_y), (max_x, min_y), (max_x, max_y)]
-    
+
     def part_a(self) -> int:
         """ Return the product of all the corner image ID's """
         product = 1
@@ -286,7 +285,7 @@ class PictureBoard(object):
         min_x = min(loc_x)
         max_y = max(loc_y)
         min_y = min(loc_y)
-        
+
         # Re-make a dictionary that maps positions to id's instead of the other
         # way around.
         pos_to_id = {}
@@ -300,8 +299,9 @@ class PictureBoard(object):
                 for x in range(min_x, max_x + 1):
                     map_line += self.all_tiles[pos_to_id[(x, y)]].get_image()[i][1:-1]
                 map.append(map_line)
-                    
+
         return map
+
 
 def read_input(file_name: str) -> dict:
     """
@@ -318,6 +318,7 @@ def read_input(file_name: str) -> dict:
         tiles[tile_id] = Tile(tile_id, lines[(x * 12) + 1: x * 12 + 11])
 
     return tiles
+
 
 def get_num_monsters(map: list) -> int:
     """
@@ -369,12 +370,14 @@ def get_num_monsters(map: list) -> int:
 
     return np.sum(np_map) - (num_monsters * 15)
 
+
 def calculate_roughness(map: list) -> int:
     """
     Given the map, calculate the number of #'s that aren't in monsters.
     """
     return get_num_monsters(map)
-    
+
+
 if __name__ == "__main__":
     tiles = read_input('input.txt')
     picture_board = PictureBoard(tiles)
@@ -382,4 +385,3 @@ if __name__ == "__main__":
     print("Part A: " + str(picture_board.part_a()))
     map = picture_board.get_map()
     print("Part B: " + str(calculate_roughness(map)))
-    

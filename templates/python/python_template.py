@@ -2,13 +2,15 @@
 Problem 1 of the Advent-of-Code 2019
 """
 
+
 def read_inputs(filename: str):
-    l = []
+    input = []
     with open(filename, 'r') as fp:
         for line in fp:
-            l.append(line.strip())
-    return l
+            input.append(line.strip())
+    return input
+
 
 if __name__ == "__main__":
-    l = read_inputs('input.txt')
-    print(l)
+    input = read_inputs('input.txt')
+    print(input)

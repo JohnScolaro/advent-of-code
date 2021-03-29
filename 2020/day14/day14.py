@@ -2,6 +2,10 @@
 Solutions for the Advent of Code - Day 14
 """
 
+
+from typing import List
+
+
 class Mask(object):
     """
     I thought that writing the mask as an object might help me for part 2.
@@ -16,13 +20,15 @@ class Mask(object):
         """ Applies the mask to the input and returns the modified number """
         return ((input | self.or_mask) & self.and_mask)
 
-def read_input_file(file_name: str) -> list:
+
+def read_input_file(file_name: str) -> List[str]:
     """ Reads input file and returns it as a list. Removes useless chars. """
-    l = []
+    instruction_list = []
     with open(file_name, 'r') as fb:
         for line in fb:
-            l.append(line[:-1].replace(' ', '').replace('[', '').replace(']', ''))
-    return l
+            instruction_list.append(line[:-1].replace(' ', '').replace('[', '').replace(']', ''))
+    return instruction_list
+
 
 def part_a(input_commands: list) -> int:
     """ The main logic for Part A """
@@ -40,6 +46,7 @@ def part_a(input_commands: list) -> int:
             memory[address] = mask.apply_mask(value)
     return sum(list(memory.values()))
 
+
 def do_memory_writes(memory: dict, floating_address: str, value: int):
     """
     Given memory (a dict), a floating address (a string with 0's, 1's, and 'X's
@@ -53,11 +60,12 @@ def do_memory_writes(memory: dict, floating_address: str, value: int):
         # Substitute new bits in for 1's and 0's
         address = floating_address
         for j in range(num_xs):
-            address = address.replace('X', floating_bits[j], 1) 
+            address = address.replace('X', floating_bits[j], 1)
         # Convert address back to an integer
         address = int(address, 2)
         # Write the value to memory
         memory[address] = value
+
 
 def get_floating_address(command_address: int, mask_str: str):
     """
@@ -72,6 +80,7 @@ def get_floating_address(command_address: int, mask_str: str):
             bit_to_write = bitwise_command_address[i]
         s += bit_to_write
     return s
+
 
 def part_b(input_commands: list) -> int:
     """ Implements the logic for Part B """

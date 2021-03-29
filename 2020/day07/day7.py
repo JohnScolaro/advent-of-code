@@ -2,6 +2,7 @@
 Solutions for the Advent of Code - Day 7
 """
 
+
 class Bag(object):
     def __init__(self, bag_type):
         self.bag_type = bag_type
@@ -39,13 +40,14 @@ def build_rule_dict(input_file: str) -> dict:
                 if contains == 'noother':
                     break
                 bag_dict[bag_type]['children'].append({'bag_type': contains[1:], 'n': int(contains[0])})
-    
+
     # Populate the parents list
     for bag in bag_dict:
         for child in bag_dict[bag]['children']:
             bag_dict[child['bag_type']]['parents'].append(bag)
 
     return bag_dict
+
 
 def return_all_possible_parents(rule_dict: list, start_bag: str) -> list:
     """ Returns a list of all bags that contain a given other bag """
@@ -66,6 +68,7 @@ def return_all_possible_parents(rule_dict: list, start_bag: str) -> list:
 
     return all_possible_containing_bags
 
+
 def total_number_of_contained_bags(rule_dict: list, bag_type: str) -> int:
     """Returns the total number of sub-bags inside a given bag"""
     bag_count = 0
@@ -75,13 +78,13 @@ def total_number_of_contained_bags(rule_dict: list, bag_type: str) -> int:
     else:
         for child in rule_dict[bag_type]['children']:
             bag_count += total_number_of_contained_bags(rule_dict, child['bag_type']) * child['n'] + child['n']
-    
+
     return bag_count
 
 
 if __name__ == "__main__":
     rd = build_rule_dict('input.txt')
-    
+
     # Part A
     containing_bags = return_all_possible_parents(rd, 'shinygold')
     print(len(containing_bags))

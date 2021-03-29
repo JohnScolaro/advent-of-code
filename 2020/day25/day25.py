@@ -2,13 +2,18 @@
 Solutions for the Advent of Code - Day 25
 """
 
-def read_input(file_name: str):
+
+from typing import Tuple
+
+
+def read_input(file_name: str) -> Tuple(int, int):
     """ Gets the two public keys from the input file """
-    l = []
+    tmp = []
     with open(file_name, 'r') as fb:
         for line in fb:
-            l.append(line.strip())
-    return (int(l[0]), int(l[1]))
+            tmp.append(line.strip())
+    return (int(tmp[0]), int(tmp[1]))
+
 
 def transform_number(subject_number: int, loop_size: int):
     """ Run the subject number through 'loop_size' loops. """
@@ -17,6 +22,7 @@ def transform_number(subject_number: int, loop_size: int):
         x *= subject_number
         x %= 20201227
     return x
+
 
 def find_loop_size(subject_number: int, public_key: int):
     """
@@ -29,6 +35,7 @@ def find_loop_size(subject_number: int, public_key: int):
         x *= subject_number
         x %= 20201227
     return loops
+
 
 def part_a(key_1: int, key_2: int):
     # Get encryption key
@@ -45,6 +52,7 @@ def part_a(key_1: int, key_2: int):
         return -1
     else:
         return encryption_key
+
 
 if __name__ == "__main__":
     key_1, key_2 = read_input('input.txt')

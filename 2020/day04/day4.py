@@ -2,10 +2,11 @@
 Solutions for the Advent of Code - Day 4
 """
 
+
 def parse_input_to_get_passport_data(input_file: str) -> list:
     d = []
 
-    record = {}    
+    record = {}
     with open(input_file, 'r') as fp:
         for line in fp:
             if line.isspace():
@@ -22,11 +23,12 @@ def parse_input_to_get_passport_data(input_file: str) -> list:
     d.append(record)
     return d
 
+
 def get_valid_passports_part_a(passport_list: list) -> int:
     """
     Returns a list of passports valid according to the rules in part a.
     """
-    required_fields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'] # 'cid' is simply not required.
+    required_fields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']  # 'cid' is simply not required.
     valid_passports = []
     for passport in passport_list:
         for required_field in required_fields:
@@ -38,12 +40,13 @@ def get_valid_passports_part_a(passport_list: list) -> int:
             valid_passports.append(passport)
     return valid_passports
 
+
 def further_validation_part_b(passport_list: list) -> list:
     """
     Returns a list of passports valid according to the list in part b.
     """
     valid_passports = []
-    
+
     for passport in passport_list:
         passport_valid_flag = True
 
@@ -79,7 +82,7 @@ def further_validation_part_b(passport_list: list) -> list:
         pid = passport['pid']
         try:
             int(pid)
-        except:
+        except ValueError:
             passport_valid_flag = False
         if len(pid) != 9:
             passport_valid_flag = False

@@ -2,12 +2,17 @@
 Solutions for the Advent of Code - Day 9
 """
 
-def get_list_of_numbers(file_path: str) -> list:
-    l = []
+
+from typing import List
+
+
+def get_list_of_numbers(file_path: str) -> List[int]:
+    list_of_numbers = []
     with open(file_path, 'r') as fb:
         for line in fb:
-            l.append(int(line[:-1]))
-    return l
+            list_of_numbers.append(int(line[:-1]))
+    return list_of_numbers
+
 
 def part_a(list_of_numbers: list, n_previous_numbers: int) -> int:
     i = n_previous_numbers
@@ -16,6 +21,7 @@ def part_a(list_of_numbers: list, n_previous_numbers: int) -> int:
             return list_of_numbers[i]
         i += 1
     return 0
+
 
 def sum_exists_in_list(list_of_numbers, n, i):
     """
@@ -28,6 +34,7 @@ def sum_exists_in_list(list_of_numbers, n, i):
             if list_of_numbers[i] / 2 != x:
                 return False
     return True
+
 
 def part_b(list_of_numbers: list, goal: int) -> int:
     """
@@ -68,4 +75,3 @@ if __name__ == "__main__":
 
     # Part B
     print("Part B: " + str(part_b(list_of_numbers, part_a(list_of_numbers, 25))))
-    

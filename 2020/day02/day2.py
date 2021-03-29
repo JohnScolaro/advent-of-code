@@ -2,7 +2,7 @@
 Solutions for the Advent of Code - Day 2
 """
 
-def n_valid_policy_1(input_file):
+def n_valid_policy_1(input_file: str) -> int:
     """Returns the number of passwords that pass password policy 1"""
     num_good_files = 0
     with open('input.txt', 'r') as fp:
@@ -22,7 +22,7 @@ def n_valid_policy_1(input_file):
                 
     return num_good_files
 
-def n_valid_policy_2(input_file):
+def n_valid_policy_2(input_file: str) -> int:
     """Returns the number of passwords that pass password policy 2"""
     num_good_files = 0
     with open('input.txt', 'r') as fp:
