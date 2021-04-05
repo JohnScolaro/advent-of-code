@@ -1,2 +1,8 @@
 *.pyc
 *.mypy_cache
+*.log
+2018/node_modules
+2018/*/*.js
+2018/*/*.map
+2018/package-lock.json
+2018/yarn.lock

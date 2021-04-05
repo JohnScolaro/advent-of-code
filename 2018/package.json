@@ -1,0 +1,13 @@
+{
+  "name": "advent-of-code",
+  "version": "1.0.0",
+  "description": "I do the advent of code",
+  "author": "John Scolaro",
+  "license": "MIT",
+  "dependencies": {
+    "typescript": "^4.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.37"
+  }
+}
