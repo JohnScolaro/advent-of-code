@@ -1,17 +1,18 @@
+from queue import Empty
 import unittest
+
 from computer import IntCodeComputer
 from computer import IntCodeComputerError
-from computer import opcode_terminate
-from computer import opcode_add
-from computer import opcode_multiply
 from computer import IntCodeParamType
-from computer import get_parameter_types
-from computer import get_current_opcode
-from computer import get_computer_program_value
-from computer import set_computer_program_value
-from computer import get_setup_computer
-from computer import day_seven_helper
-from computer import DEFAULT_OPCODES
+
+from opcodes import opcode_terminate
+from opcodes import opcode_add
+from opcodes import opcode_multiply
+from opcodes import DEFAULT_OPCODES
+
+from computer_helpers import get_setup_computer
+from computer_helpers import day_seven_a_helper
+from computer_helpers import day_seven_b_helper
 
 
 class TestOpcodeTerminate(unittest.TestCase):
@@ -62,7 +63,7 @@ class TestHelperFunctions(unittest.TestCase):
     def test_get_param_type_immediate(self) -> None:
         c = IntCodeComputer()
         c.set_program_code([11101])
-        param_types = get_parameter_types(c)
+        param_types = c.get_parameter_types()
         self.assertEqual(param_types[1], IntCodeParamType.IMMEDIATE_MODE)
         self.assertEqual(param_types[2], IntCodeParamType.IMMEDIATE_MODE)
         self.assertEqual(param_types[3], IntCodeParamType.IMMEDIATE_MODE)
@@ -71,7 +72,7 @@ class TestHelperFunctions(unittest.TestCase):
     def test_get_param_type_position(self) -> None:
         c = IntCodeComputer()
         c.set_program_code([1])
-        param_types = get_parameter_types(c)
+        param_types = c.get_parameter_types()
         self.assertEqual(param_types[1], IntCodeParamType.POSITION_MODE)
         self.assertEqual(param_types[2], IntCodeParamType.POSITION_MODE)
         self.assertEqual(param_types[3], IntCodeParamType.POSITION_MODE)
@@ -80,58 +81,58 @@ class TestHelperFunctions(unittest.TestCase):
     def test_get_param_type_large(self) -> None:
         c = IntCodeComputer()
         c.set_program_code([10101000101])
-        param_types = get_parameter_types(c)
+        param_types = c.get_parameter_types()
         self.assertEqual(param_types, {1: 1, 2: 0, 3: 0, 4: 0, 5: 1, 6: 0, 7: 1, 8: 0, 9: 1})
         self.assertEqual(len(param_types), 9)
 
     def test_get_param_type_small(self) -> None:
         c = IntCodeComputer()
         c.set_program_code([1])
-        param_types = get_parameter_types(c)
+        param_types = c.get_parameter_types()
         self.assertEqual(param_types, {})
 
     def test_get_param_type_small_2(self) -> None:
         c = IntCodeComputer()
         c.set_program_code([10])
-        param_types = get_parameter_types(c)
+        param_types = c.get_parameter_types()
         self.assertEqual(param_types, {})
         self.assertEqual(param_types[1], 0)  # Check it's a defaultdict
 
     def test_get_opcode_1(self) -> None:
         c = IntCodeComputer()
         c.set_program_code([1])
-        self.assertEqual(get_current_opcode(c), 1)
+        self.assertEqual(c.get_current_opcode(), 1)
 
     def test_get_opcode_2(self) -> None:
         c = IntCodeComputer()
         c.set_program_code([99])
-        self.assertEqual(get_current_opcode(c), 99)
+        self.assertEqual(c.get_current_opcode(), 99)
 
     def test_get_opcode_3(self) -> None:
         c = IntCodeComputer()
         c.set_program_code([101])
-        self.assertEqual(get_current_opcode(c), 1)
+        self.assertEqual(c.get_current_opcode(), 1)
 
     def test_program_value_get_position(self) -> None:
         c = IntCodeComputer()
         c.set_program_code([4, 3, 2, 1])
-        self.assertEqual(get_computer_program_value(c, 1), 1)
+        self.assertEqual(c.get_computer_program_value(1), 1)
 
     def test_program_value_get_immediate(self) -> None:
         c = IntCodeComputer()
         c.set_program_code([104, 3, 2, 1])
-        self.assertEqual(get_computer_program_value(c, 1), 3)
+        self.assertEqual(c.get_computer_program_value(1), 3)
 
     def test_program_value_set_position(self) -> None:
         c = IntCodeComputer()
         c.set_program_code([4, 3, 2, 1])
-        set_computer_program_value(c, 3, 1)
+        c.set_computer_program_value(3, 1)
         self.assertEqual(c.get_program_code(), [4, 1, 2, 1])
 
     def test_program_value_set_immediate(self) -> None:
         c = IntCodeComputer()
         c.set_program_code([104, 3, 2, 1])
-        self.assertRaises(Exception, set_computer_program_value, c, 1, 1)
+        self.assertRaises(Exception, c.set_computer_program_value, 1, 1)
 
 
 class TestComputerDay2(unittest.TestCase):
@@ -162,8 +163,9 @@ class TestComputerDay5(unittest.TestCase):
         c = get_setup_computer([3, 0, 4, 0, 99], 69, DEFAULT_OPCODES)
         retval = c.run()
 
-        self.assertEqual(c.stdoutput[0], 69)
-        self.assertEqual(len(c.stdoutput), 1)
+        self.assertEqual(c.stdoutput.get(), 69)
+        with self.assertRaises(Empty):
+            c.stdoutput.get(block=False)
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
 
     def test_part_a_two(self) -> None:
@@ -183,7 +185,12 @@ class TestComputerDay5(unittest.TestCase):
         c = get_setup_computer(program, 1, DEFAULT_OPCODES)
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput[-1], 14522484)
+        while True:
+            try:
+                output = c.stdoutput.get(block=False)
+            except Empty:
+                break
+        self.assertEqual(output, 14522484)
 
     def test_part_b_one(self) -> None:
         """
@@ -194,12 +201,12 @@ class TestComputerDay5(unittest.TestCase):
         c = get_setup_computer(program, 8, DEFAULT_OPCODES)  # 8 == 8
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput, [1])
+        self.assertEqual(c.stdoutput.get(), 1)
 
         c = get_setup_computer(program, 0, DEFAULT_OPCODES)  # 0 != 8
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput, [0])
+        self.assertEqual(c.stdoutput.get(), 0)
 
     def test_part_b_two(self) -> None:
         """
@@ -210,12 +217,12 @@ class TestComputerDay5(unittest.TestCase):
         c = get_setup_computer(program, 7, DEFAULT_OPCODES)  # Input < 8
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput, [1])
+        self.assertEqual(c.stdoutput.get(), 1)
 
         c = get_setup_computer(program, 8, DEFAULT_OPCODES)  # Input ! < 8
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput, [0])
+        self.assertEqual(c.stdoutput.get(), 0)
 
     def test_part_b_three(self) -> None:
         """
@@ -226,12 +233,12 @@ class TestComputerDay5(unittest.TestCase):
         c = get_setup_computer(program, 8, DEFAULT_OPCODES)  # Input == 8
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput, [1])
+        self.assertEqual(c.stdoutput.get(), 1)
 
         c = get_setup_computer(program, 0, DEFAULT_OPCODES)  # Input != 8
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput, [0])
+        self.assertEqual(c.stdoutput.get(), 0)
 
     def test_part_b_four(self) -> None:
         """
@@ -242,12 +249,12 @@ class TestComputerDay5(unittest.TestCase):
         c = get_setup_computer(program, 7, DEFAULT_OPCODES)  # Input < 8
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput, [1])
+        self.assertEqual(c.stdoutput.get(), 1)
 
         c = get_setup_computer(program, 8, DEFAULT_OPCODES)  # Input ! < 8
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput, [0])
+        self.assertEqual(c.stdoutput.get(), 0)
 
     def test_part_b_five(self) -> None:
         """
@@ -258,12 +265,12 @@ class TestComputerDay5(unittest.TestCase):
         c = get_setup_computer(program, 0, DEFAULT_OPCODES)  # Input == 0
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput, [0])
+        self.assertEqual(c.stdoutput.get(), 0)
 
         c = get_setup_computer(program, 69, DEFAULT_OPCODES)  # Input != 0
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput, [1])
+        self.assertEqual(c.stdoutput.get(), 1)
 
     def test_part_b_six(self) -> None:
         """
@@ -274,12 +281,12 @@ class TestComputerDay5(unittest.TestCase):
         c = get_setup_computer(program, 0, DEFAULT_OPCODES)  # Input == 0
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput, [0])
+        self.assertEqual(c.stdoutput.get(), 0)
 
         c = get_setup_computer(program, 69, DEFAULT_OPCODES)  # Input != 0
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput, [1])
+        self.assertEqual(c.stdoutput.get(), 1)
 
     def test_part_b_seven(self) -> None:
         """
@@ -291,38 +298,53 @@ class TestComputerDay5(unittest.TestCase):
         c = get_setup_computer(original_program, 7, DEFAULT_OPCODES)  # Input < 8
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput, [999])
+        self.assertEqual(c.stdoutput.get(), 999)
 
         c = get_setup_computer(original_program, 8, DEFAULT_OPCODES)  # Input == 8
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput, [1000])
+        self.assertEqual(c.stdoutput.get(), 1000)
 
         c = get_setup_computer(original_program, 9, DEFAULT_OPCODES)  # Input > 8
         retval = c.run()
         self.assertEqual(retval, IntCodeComputerError.PROGRAM_TERMINATION)
-        self.assertEqual(c.stdoutput, [1001])
+        self.assertEqual(c.stdoutput.get(), 1001)
 
 
-class TestComputerDay7(unittest.TestCase):
+class TestComputerDay7a(unittest.TestCase):
 
-    def test_a_one(self) -> None:
+    def test_one(self) -> None:
         program = [3, 15, 3, 16, 1002, 16, 10, 16, 1, 16, 15, 15, 4, 15, 99, 0, 0]
-        optimal_phases, largest_output = day_seven_helper(5, program)
+        optimal_phases, largest_output = day_seven_a_helper(program)
         self.assertEqual([4, 3, 2, 1, 0], optimal_phases)
         self.assertEqual(largest_output, 43210)
 
-    def test_a_two(self) -> None:
+    def test_two(self) -> None:
         program = [3, 23, 3, 24, 1002, 24, 10, 24, 1002, 23, -1, 23, 101, 5, 23, 23, 1, 24, 23, 23, 4, 23, 99, 0, 0]
-        optimal_phases, largest_output = day_seven_helper(5, program)
+        optimal_phases, largest_output = day_seven_a_helper(program)
         self.assertEqual([0, 1, 2, 3, 4], optimal_phases)
         self.assertEqual(largest_output, 54321)
 
-    def test_a_three(self) -> None:
+    def test_three(self) -> None:
         program = [3, 31, 3, 32, 1002, 32, 10, 32, 1001, 31, -2, 31, 1007, 31, 0, 33, 1002, 33, 7, 33, 1, 33, 31, 31, 1, 32, 31, 31, 4, 31, 99, 0, 0, 0]  # noqa: E501
-        optimal_phases, largest_output = day_seven_helper(5, program)
+        optimal_phases, largest_output = day_seven_a_helper(program)
         self.assertEqual([1, 0, 4, 3, 2], optimal_phases)
         self.assertEqual(largest_output, 65210)
+
+
+class TestComputerDay7b(unittest.TestCase):
+
+    def test_one(self) -> None:
+        program = [3, 26, 1001, 26, -4, 26, 3, 27, 1002, 27, 2, 27, 1, 27, 26, 27, 4, 27, 1001, 28, -1, 28, 1005, 28, 6, 99, 0, 0, 5]  # noqa: E501
+        optimal_phases, largest_output = day_seven_b_helper(program)
+        self.assertEqual([9, 8, 7, 6, 5], optimal_phases)
+        self.assertEqual(largest_output, 139629729)
+
+    def test_two(self) -> None:
+        program = [3, 52, 1001, 52, -5, 52, 3, 53, 1, 52, 56, 54, 1007, 54, 5, 55, 1005, 55, 26, 1001, 54, -5, 54, 1105, 1, 12, 1, 53, 54, 53, 1008, 54, 0, 55, 1001, 55, 1, 55, 2, 53, 55, 53, 4, 53, 1001, 56, -1, 56, 1005, 56, 6, 99, 0, 0, 0, 0, 10]  # noqa: E501
+        optimal_phases, largest_output = day_seven_b_helper(program)
+        self.assertEqual([9, 7, 8, 5, 6], optimal_phases)
+        self.assertEqual(largest_output, 18216)
 
 
 if __name__ == '__main__':
