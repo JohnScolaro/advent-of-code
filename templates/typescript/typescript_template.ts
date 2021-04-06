@@ -2,8 +2,9 @@
  * Problem 1 of the Advent-of-Code 2018
  */
 
-const fs = require('fs')
-const readline = require('readline');
+import * as fs from 'fs';
+import * as readline from 'readline';
+export {}
 
 const readInterface = readline.createInterface({
     input: fs.createReadStream('input.txt'),
