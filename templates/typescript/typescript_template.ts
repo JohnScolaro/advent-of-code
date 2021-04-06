@@ -11,13 +11,11 @@ const readInterface = readline.createInterface({
     console: false
 });
 
-var input = []
+var input: Array<any> = []
 
 readInterface.on('line', (line: string) => {
     input.push(parseInt(line, 10))
 })
-
-const reduce_function = (a: number, current_value: number) => a + current_value;
 
 readInterface.on('close', () => {
     console.log("Part A: " + part_a(input).toString());
@@ -25,19 +23,9 @@ readInterface.on('close', () => {
 })
 
 function part_a(input_array: Array<number>): number {
-    return input_array.reduce(reduce_function, 0);
+    return 0;
 }
 
 function part_b(input_array: Array<number>): number {
-    var hist: Set<number> = new Set();
-    var current_value: number = 0;
-    while (true) {
-        for (var i = 0; i < input_array.length; i++) {
-            current_value += input_array[i];
-            if (hist.has(current_value)) {
-                return current_value
-            }
-            hist.add(current_value)
-        }
-    }
+    return 0;
 }
