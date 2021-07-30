@@ -3,10 +3,10 @@ Problem 4 of the Advent-of-Code 2019
 """
 
 from collections import Counter
-from typing import Tuple
+from typing import Set, Tuple
 
 
-def read_inputs(filename: str) -> Tuple:
+def read_inputs(filename: str) -> Tuple[int, int]:
     """
     Reads the input file which will contain a single line: 'xxxxxx-xxxxxx'
     where x's are actually numbers. This function returns a tuple with the two
@@ -21,7 +21,7 @@ def read_inputs(filename: str) -> Tuple:
     return (min, max)
 
 
-def generate_possible_numbers(min: int, max: int) -> set:
+def generate_possible_numbers(min: int, max: int) -> Set[int]:
     """
     Returns a set of all possible numbers between but not including the two
     initial max and min numbers.
@@ -29,7 +29,7 @@ def generate_possible_numbers(min: int, max: int) -> set:
     return set(range(min + 1, max))
 
 
-def remove_numbers_without_duplicates(possible_numbers: set) -> None:
+def remove_numbers_without_duplicates(possible_numbers: Set[int]) -> None:
     """
     Takes a set of numbers, modifies that set inline to remove all numbers that
     don't have at least a single duplicate.
@@ -47,7 +47,7 @@ def remove_numbers_without_duplicates(possible_numbers: set) -> None:
         possible_numbers.remove(number_to_remove)
 
 
-def remove_non_increasing_numbers(possible_numbers: set) -> None:
+def remove_non_increasing_numbers(possible_numbers: Set[int]) -> None:
     """
     Takes a set of numbers and modifies that set inline to remove any numbers
     that contains consecutive digits that decrease. Increasing and staying the
@@ -63,7 +63,7 @@ def remove_non_increasing_numbers(possible_numbers: set) -> None:
         possible_numbers.remove(number_to_remove)
 
 
-def remove_non_twin_numbers(possible_numbers: set) -> None:
+def remove_non_twin_numbers(possible_numbers: Set[int]) -> None:
     """
     Takes a set of numbers and modifies that set inline to remove numbers
     without an 'twins' in it. Twins are when there are ONLY 2 consecutive
@@ -82,7 +82,7 @@ def remove_non_twin_numbers(possible_numbers: set) -> None:
         possible_numbers.remove(number_to_remove)
 
 
-def part_a(filename: str) -> set:
+def part_a(filename: str) -> Set[int]:
     """
     For part A of this challenge we are finding the total number of possible
     passwords which satisfy the conditions. This function return a set of all
@@ -95,7 +95,7 @@ def part_a(filename: str) -> set:
     return possible_numbers
 
 
-def part_b(filename: str) -> set:
+def part_b(filename: str) -> Set[int]:
     """
     Part B builds on part A by additionally not letting us use combinations
     with more than 2 consecutive identical digits.

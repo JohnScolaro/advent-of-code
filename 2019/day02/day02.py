@@ -5,7 +5,7 @@ Problem 2 of the Advent-of-Code 2019
 import sys
 import os
 import itertools
-from typing import List
+from typing import List, Optional
 
 sys.path.insert(1, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from intcode.computer import IntCodeComputer
@@ -22,7 +22,7 @@ def read_inputs(filename: str) -> List[int]:
     return [int(x) for x in input[0].split(',')]
 
 
-def part_a(intcode: list):
+def part_a(intcode: List[int]) -> int:
     """ Run the intcode computer and return the result for part A """
     computer = IntCodeComputer()
     computer.set_program_code(intcode)
@@ -31,10 +31,10 @@ def part_a(intcode: list):
     if retval != IntCodeComputerError.PROGRAM_TERMINATION:
         return -1
     else:
-        return computer.program_code[0]
+        return computer.get_program_code()[0]
 
 
-def part_b(intcode: list):
+def part_b(intcode: List[int]) -> Optional[int]:
     """
     Run the solution for part A through all the different combinations of valid
     verb/noun until one is found that gives the chosen number for part B.

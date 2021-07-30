@@ -1,6 +1,8 @@
 *.pyc
 *.mypy_cache
 *.log
+*.venv
+*.vscode
 2018/node_modules
 2018/*/*.js
 2018/*/*.map
