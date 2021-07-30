@@ -7,6 +7,9 @@ being orbitted by another planet. If a moon is orbitting a planet, the
 celestial body that it is orbitting is called that moon's 'primary'.
 """
 
+from typing import Dict, List, Optional
+
+
 class Planet():
     """
     Moon objects contain a small amount of information about their state.
@@ -14,12 +17,12 @@ class Planet():
     of moons.
     """
 
-    def __init__(self):
-        self.primary = None
-        self.moons = []
-        self.primaries = []
+    def __init__(self) -> None:
+        self.primary: Optional[str] = None
+        self.moons: List[str] = []
+        self.primaries: List[str] = []
 
-    def add_indirect_primaries(self, planets: dict) -> None:
+    def add_indirect_primaries(self, planets: Dict[str, "Planet"]) -> None:
         """
         A function that adds all primaries of this planet to its moons. Then
         calls the same function on all its moons. This lets us simply call this
@@ -31,7 +34,7 @@ class Planet():
             planets[moon].add_indirect_primaries(planets)
 
 
-def read_inputs(filename: str) -> dict:
+def read_inputs(filename: str) -> Dict[str, Planet]:
     """
     From the input file, return a dictionary of Planets. The keys are the names
     of the planets, and the values are the planets themself.
@@ -60,7 +63,7 @@ def read_inputs(filename: str) -> dict:
     planets['COM'].add_indirect_primaries(planets)
     return planets
 
-def get_list_of_decendants(planets: dict, planet: str) -> list:
+def get_list_of_decendants(planets: Dict[str, Planet], planet: str) -> List[str]:
     """
     Returns a list of planets that are all direct primaries of eachother.
 
@@ -78,18 +81,22 @@ def get_list_of_decendants(planets: dict, planet: str) -> list:
     p = planet
     while p != 'COM':
         decendants.append(p)
-        p = planets[p].primary
+        opt_p: Optional[str] = planets[p].primary
+        if opt_p is not None:
+            p = opt_p
+        else:
+            raise Exception("Found a planet with no primaries before COM")
     decendants.append('COM')
     return decendants
 
-def part_a(planets: dict) -> int:
+def part_a(planets: Dict[str, Planet]) -> int:
     """
     Solves part A. Adds together all the direct and indirect primaries of all
     the planets in the solar system.
     """
     return sum([len(planet.primaries) for planet in planets.values()])
     
-def part_b(planets: dict) -> int:
+def part_b(planets: Dict[str, Planet]) -> int:
     """
     Finds the total number of orbital transfers needed for YOU to get to SAN.
     """
