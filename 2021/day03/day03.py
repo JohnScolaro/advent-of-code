@@ -1,5 +1,5 @@
 """
-Problem 3 of the Advent-of-Code 2019
+Problem 3 of the Advent-of-Code 2021
 """
 
 from typing import Any, List, Set
