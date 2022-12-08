@@ -70,7 +70,6 @@ def get_all_options(input_list, x, y):
 
 def part_b(input_list: List[int]) -> int:
     scores = []
-    visible_num = 0
     for y in range(len(input_list)):
         for x in range(len(input_list[0])):
             scores.append(get_score(input_list, x, y))
@@ -80,22 +79,25 @@ def part_b(input_list: List[int]) -> int:
 
 
 def get_score(input_list, x, y):
-    l = 1
-    r = 1
-    u = 1
-    d = 1
+    l = 0
+    r = 0
+    u = 0
+    d = 0
 
+    print("test1")
     x1 = x - 1
     while x1 != -1:
         if input_list[y][x1] >= input_list[y][x]:
+            l += 1
             break
         else:
             x1 -= 1
             l += 1
 
     x2 = x + 1
-    while x2 != len(input_list[y]):
+    while x2 < len(input_list[y]):
         if input_list[y][x2] >= input_list[y][x]:
+            r += 1
             break
         else:
             x2 += 1
@@ -104,14 +106,16 @@ def get_score(input_list, x, y):
     y1 = y - 1
     while y1 != -1:
         if input_list[y1][x] >= input_list[y][x]:
+            u += 1
             break
         else:
             y1 -= 1
             u += 1
 
     y2 = y + 1
-    while y2 != len(input_list[y]):
+    while y2 != len(input_list):
         if input_list[y2][x] >= input_list[y][x]:
+            d += 1
             break
         else:
             y2 += 1
@@ -121,6 +125,6 @@ def get_score(input_list, x, y):
 
 
 if __name__ == "__main__":
-    input_list = read_inputs("input2.txt")
+    input_list = read_inputs("input.txt")
     print(f"Part A: {part_a(input_list)}")
     print(f"Part B: {part_b(input_list)}")
