@@ -84,7 +84,6 @@ def get_score(input_list, x, y):
     u = 0
     d = 0
 
-    print("test1")
     x1 = x - 1
     while x1 != -1:
         if input_list[y][x1] >= input_list[y][x]:
